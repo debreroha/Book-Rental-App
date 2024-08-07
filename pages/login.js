@@ -34,14 +34,6 @@ export default function LoginPage() {
     router.push('/dashboard');
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -77,7 +69,7 @@ export default function LoginPage() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Login
             </Typography>
             <Box component="form" noValidate onSubmit={handleLogin} sx={{ mt: 1 }}>
               <TextField
@@ -88,6 +80,7 @@ export default function LoginPage() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoFocus
               />
@@ -100,6 +93,7 @@ export default function LoginPage() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value= {password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <FormControlLabel
