@@ -1,0 +1,42 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  role     String
+  books    Book[]
+  rents    Rent[]
+}
+
+model Book {
+  id         Int      @id @default(autoincrement())
+  title      String
+  author     String
+  category   String
+  ownerId    Int
+  owner      User     @relation(fields: [ownerId], references: [id])
+  available  Boolean  @default(true)
+  quantity   Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  rents      Rent[]
+}
+
+model Rent {
+  id         Int      @id @default(autoincrement())
+  bookId     Int
+  book       Book     @relation(fields: [bookId], references: [id])
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  rentDate   DateTime @default(now())
+  returnDate DateTime?
+}
