@@ -26,4 +26,4 @@ const BookTable = () => {
   );
 };
 
-export default BookTable;
+export {BookTable}
