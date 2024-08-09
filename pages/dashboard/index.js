@@ -1,17 +1,28 @@
-import DashboardLayout from '../../components/DashboardLayout';
-import BookTable from "@/components/BookTable"
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
-const DashboardPage = () => {
+export default function Dashboard() {
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/LoginPage');
+    } else {
+      axios.get('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } })
+        .then(response => setUser(response.data))
+        .catch(() => router.push('/LoginPage'));
+    }
+  }, []);
+
+  if (!user) return <div>Loading...</div>;
+
   return (
-    <DashboardLayout>
-      <h1>Dashboard</h1>
-      <SpaceDashboardIcon />
-      <BookTable />
-
-      {/* Add dashboard content here */}
-    </DashboardLayout>
+    <div>
+      <h1>{user.role === 'admin' ? 'Admin' : 'Owner'} Dashboard</h1>
+      {/* Render dashboard components based on user role */}
+    </div>
   );
-};
-
-export default DashboardPage;
+}

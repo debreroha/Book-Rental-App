@@ -1,17 +1,17 @@
 // import DashboardLayout from "@/components/DashboardLayout";
-import DashboardPage from "./dashboard/index"
-import { AuthProvider } from "@/components/AuthProvider";
-import LoginPage from "./LoginPage";
+import Head from "next/head"
+import BookForm from "@/components/BookForm"
+import { BookTable } from "@/components/BookTable"
 
 const App = ({ Component, pageProps })  =>{
+  <Head>
+    <title>Book-R</title>
+  </Head>
   return (
     <div>
-    <AuthProvider>
-      <DashboardPage />
-      <LoginPage />
       <Component {...pageProps} />
-    </AuthProvider>
-    
+      <BookForm />
+      {/* <BookTable /> */}
     </div>
   )
 }

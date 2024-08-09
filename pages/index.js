@@ -1,12 +1,13 @@
 import Head from "next/head";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import axios from 'axios'; 
+ 
 
 export default function Home() {
-  <Head>
-  <title>Book-R</title>
-  </Head>
+  // <Head>
+  // <title>Book-R</title>
+  // </Head>
   const router = useRouter();
   const [books, setBooks] = useState([]);
 
