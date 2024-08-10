@@ -10,7 +10,7 @@ const App = ({ Component, pageProps })  =>{
   return (
     <div>
       <Component {...pageProps} />
-      <BookForm />
+      {/* <BookForm /> */}
       {/* <BookTable /> */}
     </div>
   )

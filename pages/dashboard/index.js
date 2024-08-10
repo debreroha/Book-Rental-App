@@ -9,11 +9,11 @@ export default function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      router.push('/LoginPage');
+      router.push('/login');
     } else {
       axios.get('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } })
         .then(response => setUser(response.data))
-        .catch(() => router.push('/LoginPage'));
+        .catch(() => router.push('/login'));
     }
   }, []);
 

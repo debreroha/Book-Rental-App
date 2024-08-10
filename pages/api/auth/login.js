@@ -1,15 +1,36 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import prisma from '@/lib/prisma';
+// src/pages/api/auth/login.js
+import prisma from '@/prisma/lib/prisma';
+import bcrypt from 'bcrypt';
 
 export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
+  
   const { email, password } = req.body;
 
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !bcrypt.compareSync(password, user.password)) {
-    return res.status(401).json({ error: 'Invalid credentials' });
-  }
+  try {
+    // Find the user by email
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
 
-  const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' });
-  res.status(200).json({ token });
+    if (!user) {
+      // If user does not exist
+      return res.status(200).json({ success: false, message: 'Email not found' });
+    }
+
+    // Compare the provided password with the hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      // If password is incorrect
+      return res.status(200).json({ success: false, message: 'Invalid password' });
+    }
+
+    // If email and password are correct
+    return res.status(200).json({ success: true, user });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 }
