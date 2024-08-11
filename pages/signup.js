@@ -1,4 +1,3 @@
-// src/pages/signup.js
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import AuthForm from '@/components/AuthForm';
