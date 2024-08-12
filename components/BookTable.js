@@ -1,4 +1,4 @@
-import MaterialReactTable from 'material-react-table';
+import {MaterialReactTable} from 'material-react-table';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
