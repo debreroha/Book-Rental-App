@@ -1,43 +1,36 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import AuthForm from '@/components/AuthForm';
-import { signToken } from '@/utils/auth';
-
+import { FormEvent } from 'react'
+import { useRouter } from 'next/router'
+ 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const router = useRouter();
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
+  const router = useRouter()
+ 
+  async function handleSubmit(event) {
+    event.preventDefault()
+ 
+    const formData = new FormData(event.currentTarget)
+    const email = formData.get('email')
+    const password = formData.get('password')
+ 
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      // Assume we have a signToken function to generate JWT
-      const token = signToken({ email: data.user.email, role: data.user.role, id: data.user.id });
-      localStorage.setItem('token', token);
-      router.push('/dashboard');
+    })
+ 
+    if (response.ok) {
+      router.push('/dashboard')
     } else {
-      alert(data.message);
-    }
-  };
+      // Handle errors
+      router.push('/login')
 
+    }
+  }
+ 
   return (
-    <AuthForm
-      formType="login"
-      onSubmit={handleLogin}
-      setEmail={setEmail}
-      setPassword={setPassword}
-      footerText="Don't have an account? "
-      footerLink="/signup"
-      footerLinkText="Sign Up"
-    />
-  );
+    <form onSubmit={handleSubmit}>
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+  )
 }
